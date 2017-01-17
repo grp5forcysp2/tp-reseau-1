@@ -1,0 +1,66 @@
+- Description architecture:
+ ---------------------------
+
+FAI
+
+FIREWALL
+DMZ
+LAN
+
+LAN:
+
+switch
+Routeur en redondance HSRP
+switch
+
+server admin 
+ syslog
+ dhcp
+ AD
+ stations
+
+Shema.jpg
+
+Plan d'adressage.ods
+
+
+ - Attaques à mener:
+---------------------
+
+ switch : 
+   - spanning true: MIM
+   - vlan ( defaut, hopping)
+   - usurpation IP
+ routeurs: 
+    GBLP... MIM
+ syslog: capture
+ dhcp : rogue dhcp
+
+-> credential ?
+=>
+FAI
+FIREWALL
+DMZ
+
+ - Sécurisation:
+----------------
+
+FAI
+
+FIREWALL:
+   acl, port/dis
+DMZ
+LAN
+
+LAN:
+
+switch: port/dis, ssh, account
+Routeur: port/dis, ssh, account, span, hsrp
+
+server admin 
+ syslog (ssl?)
+ dhcp ?
+ AD ? 
+ stations ?
+
+
