@@ -28,19 +28,30 @@ Plan d'adressage.ods
 ---------------------
 
  switch : 
-   - spanning true: MIM
-   - vlan ( defaut, hopping)
-   - usurpation IP
- routeurs: 
-    GBLP... MIM
+
+   yersinia
+    (passage en trunk du port -> decouvrir les vlans ?)
+    Dos ..
+   - CDP: -> dos surcharger de voisins 
+   - STP: -> isoler le reseau, saut de vlan, trunk avec fast forward?
+
+   - usurpation IP OK
+        arpspoof -t cible nous.
+        -> mim forward 
+            echo 1 >/proc/sys/net/ipv4/ip_forward
+        Gw fournie par dhcp (port libre)
+
+
+routeur:
+HSRP : ce choisir comme routeur
+intercepter, router vers le secondaire.
+ 
+
+
+
  syslog: capture
  dhcp : rogue dhcp
 
--> credential ?
-=>
-FAI
-FIREWALL
-DMZ
 
  - Sécurisation:
 ----------------
@@ -54,13 +65,73 @@ LAN
 
 LAN:
 
-switch: port/dis, ssh, account
-Routeur: port/dis, ssh, account, span, hsrp
+switch: port/dis, ssh, account, span
+Routeur: port/dis, ssh, account, hsrp (auth)
 
 server admin 
  syslog (ssl?)
  dhcp ?
  AD ? 
  stations ?
+
+#  RECONNAISSANCE:
+
+SW2:
+  on obtient une adresse DHCP avec:
+   10.5.10.1/24
+   gw   10.5.10.250
+   relay 10.5.10.254
+   DNS 10.5.90.1
+
+
+
+ capture sur le port 4:
+
+    Analyse: 
+       STP:
+             src: fe:9e:63:cc:c3:03 , dst: 01:80:c2:00:00:00
+             root = fe:9e:63:cc:b7:00, port = 0x8003 cost =4 
+       CDP:
+             SW2.grp5.forcys :    nom d'hote SW2, nom de domain grp5.forcys         
+
+       DNS:
+       10.5.90.1: DNS server
+
+       HSRP:
+
+          10.5.10.253
+          10.5.10.254   -> 253 actif
+
+
+ capture sur le port 21 (libre)
+
+-> flux ipv6
+
+
+yersinia sur port inutilisé: ça fait rien :D !
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
