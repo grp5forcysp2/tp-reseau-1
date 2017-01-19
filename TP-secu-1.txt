@@ -24,27 +24,46 @@ Shema.jpg
 Plan d'adressage.ods
 
 
- - Attaques à mener:
----------------------
+ Ecoute passive sur un port non configuré:
 
- switch : 
 
-   yersinia
-    (passage en trunk du port -> decouvrir les vlans ?)
-    Dos ..
-   - CDP: -> dos surcharger de voisins 
-   - STP: -> isoler le reseau, saut de vlan, trunk avec fast forward?
 
-   - usurpation IP OK
-        arpspoof -t cible nous.
-        -> mim forward 
+ Depuis un port LAN utilisateur legitime:
+   - obtention d'ip par dhcp: 
+      => dns, ad, gw, netmask fournit. 
+         Le dns, l'ad et le dhcp sont sur un autre reseau.
+   - MIM sur le lan par arp spoofing.
+   - usurpation de la gw par defaut:
+        arpspoof -t @ip_victime @ip_gw
+         , ou sur l'adresse de broadcast pour flouer tout le lan.
+        arpspoof -t@broadcast @ip_gw.
+ 
+        activation du routage
             echo 1 >/proc/sys/net/ipv4/ip_forward
-        Gw fournie par dhcp (port libre)
+
+      => Capture du traffic sortant et sortant du LAN.  
+
+   Exploitation des protocoles de niveau 2 avec yersinia:
+   - CDP: -> dos surcharger de voisins 
+   - CDP: fuite d'information sur l'équipement.
+   - STP: -> dos par election 
+       => Isolation du LAN.
+
+ Depuis un port LAN libre non configuré sur le commutateur:
+   - DTP: -> passage du port en mode trunk.
+   - Ecoute passsive du traffic:
+     Decouverte d'adresse, d'equpipements, de vlans et de protocoles.
+     -> Raccordement 802.1q sur les différents vlans du réseau.
+    
+    - HSRP: Eléction de notre machine comme routeur actif sur l'ensemble des vlans concerné.
+      Passage de la machine en routeur, déclaration de la VIP en alias d'interface.
+      => capture de l'ensemble du trafic sortant et entrant du reseau interne.
+  
+   - arpflood avec macof: enregistrement de 17000 entrées: pas de passage en mode HUB, mais DOS
 
 
-routeur:
-HSRP : ce choisir comme routeur
-intercepter, router vers le secondaire.
+ Reste à faire: 
+   capter les logs,
  
 
 
