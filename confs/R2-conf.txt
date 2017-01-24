@@ -1,0 +1,208 @@
+Current configuration : 3975 bytes
+!
+! Last configuration change at 14:35:04 UTC Mon Jan 23 2017 by admin
+version 15.2
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+!
+hostname R2
+!
+boot-start-marker
+boot-end-marker
+!
+!
+enable secret 5 $1$x4nu$QDIixD6HGn6jRaz6PSTMX1
+!
+no aaa new-model
+memory-size iomem 10
+!
+ip cef
+!
+!
+!         
+!         
+!         
+!         
+ip domain name grp5.forcys
+login on-failure log
+login on-success log
+no ipv6 cef
+!         
+multilink bundle-name authenticated
+!         
+!         
+key chain hsrp1
+ key 100  
+  key-string 7 1234212746031F163A
+!         
+!         
+license udi pid CISCO1941/K9 sn FCZ1835C167
+!         
+!         
+username admin secret 5 $1$M9XQ$PQxxG3KRcJl1e5s7/X29j1
+!         
+redundancy
+!         
+!         
+!         
+!         
+!         
+ip ssh version 2
+!         
+track 1 interface GigabitEthernet0/0 ip routing
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+!         
+interface Embedded-Service-Engine0/0
+ no ip address
+ shutdown 
+!         
+interface GigabitEthernet0/0
+ ip address 172.16.5.1 255.255.255.0
+ standby 100 ip 172.16.5.250
+ standby 100 preempt
+ standby 100 name interco
+ duplex auto
+ speed auto
+!         
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!         
+interface GigabitEthernet0/1.10
+ description VLAN_COMMERCIAL
+ encapsulation dot1Q 10
+ ip address 10.5.10.254 255.255.255.0
+ ip helper-address 10.5.90.1
+ standby 10 ip 10.5.10.250
+ standby 10 preempt
+ standby 10 name COM
+ standby 10 authentication md5 key-chain hsrp1
+ !         
+interface GigabitEthernet0/1.20
+ description VLAN_ADMIN
+ encapsulation dot1Q 20
+ ip address 10.5.20.254 255.255.255.0
+ ip helper-address 10.5.90.1
+ standby 20 ip 10.5.20.250
+ standby 20 preempt
+ standby 20 authentication md5 key-chain hsrp1
+ standby 20 name ADMIN
+!         
+interface GigabitEthernet0/1.30
+ description VLAN_PRODUCTION
+ encapsulation dot1Q 30
+ ip address 10.5.30.254 255.255.255.0
+ ip helper-address 10.5.90.1
+ standby 30 ip 10.5.30.250
+ standby 30 preempt
+ standby 30 authentication md5 key-chain hsrp1
+ standby 30 name PROD
+!         
+interface GigabitEthernet0/1.40
+ description VLAN_APPRENANT
+ encapsulation dot1Q 40
+ ip address 10.5.40.254 255.255.255.0
+ ip helper-address 10.5.90.1
+ standby 40 ip 10.5.40.250
+ standby 40 preempt
+ standby 40 authentication md5 key-chain hsrp1
+ standby 40 name APPRENANT
+!         
+interface GigabitEthernet0/1.50
+ description VLAN_GESTION_RESEAU
+ encapsulation dot1Q 50
+ ip address 10.5.50.254 255.255.255.0
+ ip helper-address 10.5.90.1
+ standby 50 ip 10.5.50.250
+ standby 50 preempt
+ standby 50 authentication md5 key-chain hsrp1
+ standby 50 name GESTION_RESEAU
+!         
+interface GigabitEthernet0/1.90
+ description VLAN_IT
+ encapsulation dot1Q 90
+ ip address 10.5.90.254 255.255.255.0
+ standby 90 ip 10.5.90.250
+ standby 90 preempt
+ standby 90 name IT
+ standby 90 authentication md5 key-chain hsrp1
+ 
+interface Serial0/1/0
+ no ip address
+ shutdown 
+ clock rate 2000000
+!         
+interface Serial0/1/1
+ no ip address
+ shutdown 
+ clock rate 2000000
+!         
+interface GigabitEthernet0/0/0
+ no ip address
+!         
+interface GigabitEthernet0/0/1
+ no ip address
+!         
+interface GigabitEthernet0/0/2
+ no ip address
+!         
+interface GigabitEthernet0/0/3
+ no ip address
+!         
+interface Vlan1
+ no ip address
+!         
+router ospf 10
+ router-id 1.1.1.1
+ passive-interface GigabitEthernet0/1.10
+ passive-interface GigabitEthernet0/1.20
+ passive-interface GigabitEthernet0/1.30
+ passive-interface GigabitEthernet0/1.40
+ passive-interface GigabitEthernet0/1.50
+ passive-interface GigabitEthernet0/1.90
+ network 10.5.10.0 0.0.0.255 area 0
+ network 10.5.20.0 0.0.0.255 area 0
+ network 10.5.30.0 0.0.0.255 area 0
+ network 10.5.40.0 0.0.0.255 area 0
+ network 10.5.50.0 0.0.0.255 area 0
+ network 10.5.90.0 0.0.0.255 area 0
+ network 172.16.5.0 0.0.0.255 area 0
+!         
+ip forward-protocol nd
+!         
+no ip http server
+no ip http secure-server
+!         
+!         
+logging trap notifications
+logging origin-id ip
+logging facility local4
+logging host 10.5.90.1
+logging host 10.5.90.1 transport udp port 3300
+!         
+!         
+!         
+control-plane
+!         
+!         
+!         
+line con 0
+  login local
+line aux 0
+   login local
+line vty 0 4
+ login local
+ transport input ssh
+!         
+scheduler allocate 20000 1000
+!         
+end       
