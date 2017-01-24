@@ -35,7 +35,6 @@ Plan d'adressage.ods
    - MIM sur le lan par arp spoofing.
    - usurpation de la gw par defaut:
         arpspoof -t @ip_victime @ip_gw
-         , ou sur l'adresse de broadcast pour flouer tout le lan.
         arpspoof -t@broadcast @ip_gw.
  
         activation du routage
@@ -61,19 +60,53 @@ Plan d'adressage.ods
   
    - arpflood avec macof: enregistrement de 17000 entrées: pas de passage en mode HUB, mais DOS
 
-
- Reste à faire: 
-   capter les logs,
+ DOS synflood hping3.
+ dhcp : rogue dhcp
  
 
-
-
- syslog: capture
- dhcp : rogue dhcp
+syslog: capture
 
 
  - Sécurisation:
 ----------------
+switch: port/dis, ssh, account, span
+Routeur: port/dis, ssh, account, hsrp (auth)
+
+acces physique: 
+port desactivé, sur un vlan fictif, pas de negociation.
+
+arp: limiter la frequence
+
+cdp ? desactiver.
+
+stp: desactiver sauf sur port concernés.
+
+dtp: desactiver
+
+
+IP:
+
+acl: pas de routage intervlan sauf depuis le vlan_adimin, vers vlan serveurs pour dhcp, www, ad(x?),
+  servers: vlan fo/bo/it 
+   fo services utilisateurs
+   bo logs
+   it login 
+
+HSRP: authentification.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 FAI
 
@@ -84,8 +117,6 @@ LAN
 
 LAN:
 
-switch: port/dis, ssh, account, span
-Routeur: port/dis, ssh, account, hsrp (auth)
 
 server admin 
  syslog (ssl?)
@@ -94,6 +125,10 @@ server admin
  stations ?
 
 #  RECONNAISSANCE:
+
+
+
+
 
 SW2:
   on obtient une adresse DHCP avec:
@@ -124,10 +159,6 @@ SW2:
 
  capture sur le port 21 (libre)
 
--> flux ipv6
-
-
-yersinia sur port inutilisé: ça fait rien :D !
 
 
 

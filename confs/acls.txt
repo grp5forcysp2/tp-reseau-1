@@ -1,0 +1,160 @@
+
+
+
+!R(1,2)   definitions
+
+! VLAN 10
+!1) interdit 10.5.10.0 0.0.0.255 port http vers @server_AD 
+access-list 110 deny ip 10.5.10.0 0.0.0.255 host 10.5.90.1 -eq 80,443 
+
+!2) autorise 10.5.10.0 0.0.0.255 vers @server_AD
+access-list 110 dynamic permit ip 10.5.10.0 0.0.0.255 host 10.5.90.1
+
+!3) authorise son reseau
+access-list 110 dynamic permit ip 10.5.10.0 0.0.0.255 10.5.10.0 0.0.0.255
+
+!3) interdit les autres lan
+access-list 110 deny ip 10.5.10.0 0.0.0.255 10.5.0.0 0.0.255.255
+
+!3) autorise tout le reste
+access-list 110 permit ip 10.5.10.0 0.0.0.255 0.0.0.0 0.0.0.0
+
+
+! Applications
+interface Ge0/1.10
+ip access-group 110 in
+
+
+
+
+
+!R1
+! vlan 10
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 110 permit ip  10.5.10.0 0.0.0.255 host 10.5.90.1
+access-list 110 permit ip  10.5.10.0 0.0.0.255 10.5.10.0 0.0.0.255
+access-list 110 permit ip  host 10.5.10.254  host 224.0.0.2
+access-list 110 permit udp 10.5.10.0 0.0.0.255 any eq 53
+access-list 110 permit tcp 10.5.10.0 0.0.0.255 any eq 80
+access-list 110 permit tcp 10.5.10.0 0.0.0.255 any eq 443
+access-list 110 deny   ip any any
+
+! vlan 20
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 120 permit ip  10.5.20.0 0.0.0.255 host 10.5.90.1
+access-list 120 permit ip  10.5.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+access-list 120 permit ip  host 10.5.20.254  host 224.0.0.2
+access-list 120 permit udp 10.5.20.0 0.0.0.255 any eq 53
+access-list 120 permit tcp 10.5.20.0 0.0.0.255 any eq 80
+access-list 120 permit tcp 10.5.20.0 0.0.0.255 any eq 443
+access-list 120 deny   ip any any
+
+! vlan 30
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 130 permit ip  10.5.30.0 0.0.0.255 host 10.5.90.1
+access-list 130 permit ip  10.5.30.0 0.0.0.255 10.5.30.0 0.0.0.255
+access-list 130 permit ip  host 10.5.30.254  host 224.0.0.2
+access-list 130 permit udp 10.5.30.0 0.0.0.255 any eq 53
+access-list 130 permit tcp 10.5.30.0 0.0.0.255 any eq 80
+access-list 130 permit tcp 10.5.30.0 0.0.0.255 any eq 443
+access-list 130 deny   ip any any
+
+! vlan 40
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 140 permit ip  10.5.40.0 0.0.0.255 host 10.5.90.1
+access-list 140 permit ip  10.5.40.0 0.0.0.255 10.5.40.0 0.0.0.255
+access-list 140 permit ip  host 10.5.40.254  host 224.0.0.2
+access-list 140 permit udp 10.5.40.0 0.0.0.255 any eq 53
+access-list 140 permit tcp 10.5.40.0 0.0.0.255 any eq 80
+access-list 140 permit tcp 10.5.40.0 0.0.0.255 any eq 443
+access-list 140 deny   ip any any
+
+
+! vlan 50
+access-list 150 permit ip any any
+
+! vlan 90
+access-list 190 permit ip any any
+
+
+! --------------------------------------------------
+! --------------------------------------------------
+! --------------------------------------------------
+! --------------------------------------------------
+
+! R2
+
+! vlan 10
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 110 deny   tcp 10.5.10.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 110 permit ip  10.5.10.0 0.0.0.255 host 10.5.90.1
+access-list 110 permit ip  10.5.10.0 0.0.0.255 10.5.10.0 0.0.0.255
+access-list 110 permit ip  host 10.5.10.253  host 224.0.0.2
+access-list 110 permit udp 10.5.10.0 0.0.0.255 any eq 53
+access-list 110 permit tcp 10.5.10.0 0.0.0.255 any eq 80
+access-list 110 permit tcp 10.5.10.0 0.0.0.255 any eq 443
+access-list 110 deny   ip any any
+
+! vlan 20
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 120 deny   tcp 10.5.20.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 120 permit ip  10.5.20.0 0.0.0.255 host 10.5.90.1
+access-list 120 permit ip  10.5.20.0 0.0.0.255 10.5.20.0 0.0.0.255
+access-list 120 permit ip  host 10.5.20.253  host 224.0.0.2
+access-list 120 permit udp 10.5.20.0 0.0.0.255 any eq 53
+access-list 120 permit tcp 10.5.20.0 0.0.0.255 any eq 80
+access-list 120 permit tcp 10.5.20.0 0.0.0.255 any eq 443
+access-list 120 deny   ip any any
+
+! vlan 30
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 130 deny   tcp 10.5.30.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 130 permit ip  10.5.30.0 0.0.0.255 host 10.5.90.1
+access-list 130 permit ip  10.5.30.0 0.0.0.255 10.5.30.0 0.0.0.255
+access-list 130 permit ip  host 10.5.30.253  host 224.0.0.2
+access-list 130 permit udp 10.5.30.0 0.0.0.255 any eq 53
+access-list 130 permit tcp 10.5.30.0 0.0.0.255 any eq 80
+access-list 130 permit tcp 10.5.30.0 0.0.0.255 any eq 443
+access-list 130 deny   ip any any
+
+! vlan 40
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq www
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq 443
+access-list 140 deny   tcp 10.5.40.0 0.0.0.255 host 10.5.90.1 eq 8080
+access-list 140 permit ip  10.5.40.0 0.0.0.255 host 10.5.90.1
+access-list 140 permit ip  10.5.40.0 0.0.0.255 10.5.40.0 0.0.0.255
+access-list 140 permit ip  host 10.5.40.253  host 224.0.0.2
+access-list 140 permit udp  any host 255.255.255.255
+access-list 140 permit udp 10.5.40.0 0.0.0.255 any eq 53
+access-list 140 permit tcp 10.5.40.0 0.0.0.255 any eq 80
+access-list 140 permit tcp 10.5.40.0 0.0.0.255 any eq 443
+access-list 140 deny   ip any any
+
+! vlan 50
+access-list 150 permit ip any any
+
+!vlan 90 
+access-list 190 permit ip any any
+
+
+
+
+
+
+
+
+
+
+
+
